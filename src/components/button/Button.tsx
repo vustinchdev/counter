@@ -1,4 +1,5 @@
 import React from 'react'
+import { StyledButton } from './Button_Style'
 
 type ButtonPropsType = {
     name: string
@@ -13,6 +14,10 @@ export const Button: React.FC<ButtonPropsType> = (props) => {
     }
 
     return (
-        <button onClick={onClickHandler}>{props.name}</button>
+        <StyledButton
+            onClick={onClickHandler}
+            disabled={props.disabled}>
+            {props.name}
+        </StyledButton>
     )
 }
