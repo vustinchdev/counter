@@ -5,6 +5,8 @@ import { ButtonsWrapper } from './components/ButtonsWrapper';
 import { Scoreboard } from './components/scoreboard/Scoreboard';
 import { Button } from './components/button/Button';
 import { Counter } from './components/Counter';
+import { SettingType } from './components/settingType/SettingsDisplay';
+
 
 function App() {
 
@@ -23,9 +25,19 @@ function App() {
     setNum(0)
   }
 
+  const setSettings = () => {
+
+  }
+
   return (
     <div className="App">
       <Container>
+        <Counter>
+          <SettingType minNum={minNum} maxNum={maxNum} />
+          <ButtonsWrapper>
+            <Button name="set" onClick={setSettings} />
+          </ButtonsWrapper>
+        </Counter>
         <Counter>
           <Scoreboard num={num} maxNum={maxNum} />
           <ButtonsWrapper>

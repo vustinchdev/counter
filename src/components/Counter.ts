@@ -11,4 +11,8 @@ export const Counter = styled.div`
     border-radius: 10px;
     padding: 20px;
     border: 2px solid ${theme.colors.accent};
+
+    & + & {
+        margin-left: 30px;
+    }
 ` 
