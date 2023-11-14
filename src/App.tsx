@@ -1,52 +1,95 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Container } from './components/Container';
 import { ButtonsWrapper } from './components/ButtonsWrapper';
-import { Scoreboard } from './components/scoreboard/Scoreboard';
 import { Button } from './components/button/Button';
 import { Counter } from './components/Counter';
-import { SettingType } from './components/settingType/SettingsDisplay';
+import { Input } from './input/Input';
+import { SettingsDisplay } from './components/SettingsDisplay';
+import { Scoreboard } from './components/Scoreboard';
+
 
 
 function App() {
 
-  let minNum: number = 0
-  let maxNum: number = 5
-
+  const [min, setMin] = useState(0)
+  const [max, setMax] = useState(5)
   const [num, setNum] = useState(0)
+  const [value, setValue] = useState<string | null>(`enter values and press 'set'`)
+
+  useEffect(() => {
+    let minAsString = localStorage.getItem('minValue')
+    let maxAsString = localStorage.getItem('maxValue')
+    if (minAsString && maxAsString) {
+      setMin(JSON.parse(minAsString))
+      setMax(JSON.parse(maxAsString))
+      setValue(null)
+      setNum(JSON.parse(minAsString))
+    }
+  }, [])
+
+  const setSettings = () => {
+    setValue(null)
+    localStorage.setItem('minValue', JSON.stringify(min))
+    localStorage.setItem('maxValue', JSON.stringify(max))
+    setNum(min)
+  }
 
   const increase = () => {
-    if (num < maxNum) {
+    if (num < max) {
       setNum(num + 1)
     }
   }
 
   const reset = () => {
-    setNum(0)
+    setNum(min)
   }
 
-  const setSettings = () => {
-
+  const onChangeHandlerMax = (valueNumber: number) => {
+    if (valueNumber < 0 || valueNumber <= min) {
+      setMax(valueNumber)
+      setValue('incorrect value!')
+    } else {
+      setMax(valueNumber)
+      setValue(`enter values and press 'set'`)
+    }
   }
+  const onChangeHandlerMin = (valueNumber: number) => {
+    if (valueNumber < 0 || valueNumber >= max) {
+      setMin(valueNumber)
+      setValue('incorrect value!')
+    } else {
+      setMin(valueNumber)
+      setValue(`enter values and press 'set'`)
+    }
+  }
+
+  let disabledCondition = value === 'incorrect value!'
+  let incDisabledCondition = value !== null || num === max
+  let resetDisabledCondition = value !== null || num === min
+
 
   return (
     <div className="App">
       <Container>
         <Counter>
-          <SettingType minNum={minNum} maxNum={maxNum} />
+          <SettingsDisplay>
+            <Input title={'max value:'} valueNumber={max} onChangeNumber={onChangeHandlerMax} value={value} />
+            <Input title={'min value:'} valueNumber={min} onChangeNumber={onChangeHandlerMin} value={value} />
+          </SettingsDisplay>
           <ButtonsWrapper>
-            <Button name="set" onClick={setSettings} />
+            <Button name="set" onClick={setSettings} disabled={disabledCondition} />
           </ButtonsWrapper>
         </Counter>
         <Counter>
-          <Scoreboard num={num} maxNum={maxNum} />
+          <Scoreboard color={disabledCondition || max === num ? 'red' : ''}>{value === null ? num : value}</Scoreboard>
           <ButtonsWrapper>
-            <Button name="inc" onClick={increase} disabled={num === maxNum} />
-            <Button name="reset" onClick={reset} disabled={num === minNum} />
+            <Button name="inc" onClick={increase} disabled={incDisabledCondition} />
+            <Button name="reset" onClick={reset} disabled={resetDisabledCondition} />
           </ButtonsWrapper>
         </Counter>
       </Container>
-    </div>
+    </div >
   );
 }
 
