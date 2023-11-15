@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { theme } from "../styles/Theme";
 
 type StyledInputType = {
@@ -18,7 +18,7 @@ const InputWrapper = styled.div`
 } 
 
 & + & {
-        margin-top: 40px;
+        margin-top: 35px;
     }
 `
 

@@ -82,7 +82,9 @@ function App() {
           </ButtonsWrapper>
         </Counter>
         <Counter>
-          <Scoreboard color={disabledCondition || max === num ? 'red' : ''}>{value === null ? num : value}</Scoreboard>
+          {value === null
+            ? <Scoreboard color={disabledCondition || max === num ? 'red' : ''}>{num}</Scoreboard>
+            : <Scoreboard color={disabledCondition ? 'red' : ''}>{value}</Scoreboard>}
           <ButtonsWrapper>
             <Button name="inc" onClick={increase} disabled={incDisabledCondition} />
             <Button name="reset" onClick={reset} disabled={resetDisabledCondition} />
